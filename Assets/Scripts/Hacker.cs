@@ -5,6 +5,11 @@ using System;
 
 public class Hacker : MonoBehaviour
 {
+    // Game state
+    int level;
+    enum Screen { MainMenu, Password, Win };
+    Screen currentScreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +18,7 @@ public class Hacker : MonoBehaviour
 
     void ShowMainMenu(string greeting)
     {
+        currentScreen = Screen.MainMenu;
         Terminal.ClearScreen();
         Terminal.WriteLine(greeting);
         Terminal.WriteLine("What would you like to hack into?\n" +
@@ -24,11 +30,35 @@ public class Hacker : MonoBehaviour
         "Enter your selection: ");
     }
 
-    void OnUserInput(string input)
+    void OnUserInput(string input) // only decides how to handle user input
     {
         if (input == "menu")
         {
             Start();
+            currentScreen = Screen.MainMenu;
+        }
+        else if (currentScreen == Screen.MainMenu)
+        {
+            RunMainMenu(input);
+        }
+    }
+
+    void RunMainMenu(string input)  // block that will determine what will happen based on user input
+    {
+        if (input == "1")
+        {
+            level = 1;
+            StartGame();
+        }
+        else if (input == "2")
+        {
+            level = 2;
+            StartGame();
+        }
+        else if (input == "3")
+        {
+            level = 3;
+            StartGame();
         }
         else if (input == "Sabrina" || input == "sabrina")
         {
@@ -50,4 +80,10 @@ public class Hacker : MonoBehaviour
         }
     }
 
+    void StartGame() // method that performs functions once game actually starts
+    {
+        currentScreen = Screen.Password; // changes state to password from menu
+        Terminal.WriteLine("You have chosen level " + level);
+        Terminal.WriteLine("Please enter your password: ");
+    }
 }
